@@ -4,6 +4,7 @@ import {
 } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthNavigation from "./AuthNavigation";
+import TabNavigation from "./TabNavigation";
 
 const Stack = createStackNavigator<RootNavigationType>();
 
@@ -19,6 +20,7 @@ export default function RootNavigation() {
           gestureDirection: "horizontal",
         }}
       >
+        <Stack.Screen name="TabNavigation" component={TabNavigation} />
         <Stack.Screen name="AuthNavigation" component={AuthNavigation} />
       </Stack.Navigator>
     </NavigationContainer>
