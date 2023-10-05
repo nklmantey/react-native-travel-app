@@ -16,7 +16,7 @@ export default function WelcomeScreen() {
       <HeroImage
         source={require("../../assets/images/hero.jpg")}
         style={{ backgroundColor: "rgba(0, 0, 0, 1)" }}
-        imageStyle={{ opacity: 0.6 }}
+        imageStyle={{ opacity: 0.8 }}
       >
         <SafeAreaContainer>
           <TextContainer>
@@ -24,7 +24,7 @@ export default function WelcomeScreen() {
             <Button
               title="Get started"
               onPress={() => navigate("Login")}
-              icon={<Ionicons name="arrow-forward" size={16} />}
+              icon={<Ionicons name="arrow-forward" size={16} color="#fff" />}
             />
           </TextContainer>
         </SafeAreaContainer>

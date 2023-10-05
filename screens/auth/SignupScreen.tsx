@@ -52,7 +52,7 @@ export default function SignupScreen() {
       </View>
 
       <BottomView>
-        <Button title="Sign up" onPress={() => handleSignup()} />
+        <Button title="Next" onPress={() => navigate("FinishProfile")} />
         <RegularText onPress={() => navigate("Login")}>
           Already have an account? Head to login
         </RegularText>
