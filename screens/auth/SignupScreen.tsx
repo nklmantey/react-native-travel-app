@@ -8,22 +8,23 @@ import { useState } from "react";
 import { RegularText } from "../../components/StyledText";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 
-export default function LoginScreen() {
+export default function SignupScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const { navigate }: NavigationProp<AuthNavigationType> = useNavigation();
 
-  async function handleLogin() {}
+  async function handleSignup() {}
 
   return (
     <Container>
       <View>
         <StatusBar style="dark" />
         <Header
-          title="Login"
-          description="Fill in the fields below to log back in"
+          title="Sign up"
+          description="Fill in the fields below to create an account"
           canGoBack
-          screen="Welcome"
+          screen="Login"
         />
 
         <InputContainer>
@@ -40,13 +41,20 @@ export default function LoginScreen() {
             isPassword
             label="Password"
           />
+          <Input
+            value={confirmPassword}
+            onChangeText={(e) => setConfirmPassword(e)}
+            placeholder="Re-enter your password"
+            isPassword
+            label="Confirm Password"
+          />
         </InputContainer>
       </View>
 
       <BottomView>
-        <Button title="Log in" onPress={() => handleLogin()} />
-        <RegularText onPress={() => navigate("Signup")}>
-          Don't have an account? Create one now
+        <Button title="Sign up" onPress={() => handleSignup()} />
+        <RegularText onPress={() => navigate("Login")}>
+          Already have an account? Head to login
         </RegularText>
       </BottomView>
     </Container>

@@ -4,6 +4,7 @@ type RootNavigationType = {
 };
 
 type AuthNavigationType = {
+  Welcome: undefined;
   Login: undefined;
   Signup: undefined;
 };
