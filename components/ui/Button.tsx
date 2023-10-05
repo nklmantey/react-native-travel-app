@@ -1,5 +1,5 @@
 import { TouchableOpacity, ActivityIndicator } from "react-native";
-import { RegularText } from "../StyledText";
+import { BoldText } from "../StyledText";
 
 type ButtonProps = {
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost";
@@ -37,27 +37,29 @@ export default function Button({
         paddingVertical: size === "default" ? 8 : 0,
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 6,
+        borderRadius: 8,
         borderWidth: variant === "outline" ? 1 : 0,
         borderColor: variant === "outline" ? "#d3d3d3" : "",
         flexDirection: icon ? "row" : undefined,
         gap: icon ? 12 : 0,
+        width: "100%",
       }}
     >
       {isLoading ? (
         <ActivityIndicator color="#fff" />
       ) : (
         <>
-          <RegularText
+          <BoldText
             style={{
               color:
                 variant === "default" || variant === "destructive"
                   ? "#fff"
                   : "#000",
+              fontSize: 16,
             }}
           >
             {title}
-          </RegularText>
+          </BoldText>
           {icon && icon}
         </>
       )}

@@ -58,7 +58,7 @@ export default function Input({
             paddingVertical: 8,
             borderWidth: isPassword ? 0 : isFocused ? 1.5 : 1,
             borderColor: isFocused ? "#000" : "#d3d3d3",
-            fontFamily: "InterRegular",
+            fontFamily: "SatoshiRegular",
             alignItems: "center",
           }}
           keyboardType={type}
