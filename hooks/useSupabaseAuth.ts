@@ -1,20 +1,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { Session } from "@supabase/supabase-js";
+import { useUserStore } from "../store/useUserStore";
 
 export default function useSupabaseAuth() {
-  const [loading, setLoading] = useState(false);
-  const [session, setSession] = useState<Session | null>(null);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []);
+  const session = useUserStore((state) => state.session);
 
   async function signInWithEmail(email: string, password: string) {
     const { error, data } = await supabase.auth.signInWithPassword({

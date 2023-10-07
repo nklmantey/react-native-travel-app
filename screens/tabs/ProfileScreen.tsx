@@ -9,15 +9,16 @@ import { Header } from "../../components";
 import { supabase } from "../../lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useUserStore } from "../../store/useUserStore";
 
 export default function ProfileScreen() {
   const [loading, setLoading] = useState(false);
-  const [session, setSession] = useState<Session | null>();
   const [username, setUsername] = useState("");
   const [fullName, setFullName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const { getUserProfile, updateUserProfile } = useSupabaseAuth();
   const { navigate }: NavigationProp<TabNavigationType> = useNavigation();
+  const session = useUserStore((state) => state.session);
 
   async function getProfile() {
     setLoading(true);
@@ -61,12 +62,6 @@ export default function ProfileScreen() {
       setLoading(false);
     }
   }
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-  }, []);
 
   useEffect(() => {
     if (session) {
