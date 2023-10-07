@@ -1,4 +1,4 @@
-import { TouchableOpacity, View } from "react-native";
+import { Pressable, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { StatusBar } from "expo-status-bar";
@@ -37,9 +37,9 @@ export default function FinishProfileScreen() {
           title="Create account"
           onPress={() => handleAddAvatarToProfile()}
         />
-        <RegularText onPress={() => navigate("Login")}>
-          Already have an account? Head to login
-        </RegularText>
+        <Pressable onPress={() => navigate("Login")}>
+          <RegularText>Already have an account? Head to login</RegularText>
+        </Pressable>
       </BottomView>
     </Container>
   );

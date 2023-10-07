@@ -2,12 +2,7 @@ import {
   TransitionPresets,
   createStackNavigator,
 } from "@react-navigation/stack";
-import {
-  LoginScreen,
-  WelcomeScreen,
-  SignupScreen,
-  FinishProfileScreen,
-} from "../screens/auth";
+import { LoginScreen, WelcomeScreen, SignupScreen } from "../screens/auth";
 
 const Stack = createStackNavigator<AuthNavigationType>();
 
@@ -25,7 +20,6 @@ export default function AuthNavigation() {
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
-      <Stack.Screen name="FinishProfile" component={FinishProfileScreen} />
     </Stack.Navigator>
   );
 }

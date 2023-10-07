@@ -4,6 +4,8 @@ import RootNavigation from "./navigation/RootNavigation";
 import { useCachedResources } from "./hooks";
 import { View } from "react-native";
 import styled from "styled-components/native";
+import { useUserStore } from "./store/useUserStore";
+import { useEffect } from "react";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();

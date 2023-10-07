@@ -15,7 +15,7 @@ import Animated, {
   useAnimatedGestureHandler,
   withSpring,
 } from "react-native-reanimated";
-import { BoldText, RegularText } from "..";
+import { BoldText, RegularText } from "../StyledText";
 import Button from "./Button";
 import { View } from "react-native";
 

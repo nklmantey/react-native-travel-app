@@ -10,15 +10,19 @@ import {
 } from "../../../components/StyledText";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useUserStore } from "../../../store/useUserStore";
 
 export default function HomeScreen() {
   const [activeCategory, setActiveCategory] = useState("");
+  const { navigate }: NavigationProp<TabNavigationType> = useNavigation();
+  const user = useUserStore((state) => state.user);
 
   return (
     <Container>
       <HeaderViewContainer>
         <HeadingText>Welcome user</HeadingText>
-        <UserAvatar>
+        <UserAvatar onPress={() => navigate("Profile")}>
           <Ionicons name="person" size={16} color={"#000"} />
         </UserAvatar>
       </HeaderViewContainer>

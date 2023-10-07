@@ -7,11 +7,11 @@ type AuthNavigationType = {
   Welcome: undefined;
   Login: undefined;
   Signup: undefined;
-  FinishProfile: undefined;
 };
 
 type TabNavigationType = {
   HomeNavigation: undefined;
+  Profile: undefined;
   ExploreNavigation: undefined;
   BookmarksNavigation: undefined;
 };

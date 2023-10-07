@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Pressable, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { StatusBar } from "expo-status-bar";
@@ -7,14 +7,43 @@ import { Button, Input } from "../../components/ui";
 import { useState } from "react";
 import { RegularText } from "../../components/StyledText";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useSupabaseAuth } from "../../hooks";
+import { useUserStore } from "../../store/useUserStore";
 
 export default function SignupScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const { navigate }: NavigationProp<AuthNavigationType> = useNavigation();
+  const { signUpWithEmail } = useSupabaseAuth();
+  const setUser = useUserStore((state) => state.setUser);
+  const setSession = useUserStore((state) => state.setSession);
 
-  async function handleSignup() {}
+  async function handleSignup() {
+    setLoading(true);
+
+    try {
+      const { data, error } = await signUpWithEmail(email, password);
+
+      if (error) {
+        setLoading(false);
+        console.log(error);
+      }
+
+      if (data.user === null || data.session === null) {
+        setLoading(false);
+      }
+
+      if (data.session && data.user) {
+        setSession(data.session);
+        setUser(data.user);
+      }
+      navigate("Login");
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <Container>
@@ -52,10 +81,14 @@ export default function SignupScreen() {
       </View>
 
       <BottomView>
-        <Button title="Next" onPress={() => navigate("FinishProfile")} />
-        <RegularText onPress={() => navigate("Login")}>
-          Already have an account? Head to login
-        </RegularText>
+        <Button
+          title="Next"
+          onPress={() => handleSignup()}
+          isLoading={loading}
+        />
+        <TouchableOpacity onPress={() => navigate("Login")}>
+          <RegularText>Already have an account? Head to login</RegularText>
+        </TouchableOpacity>
       </BottomView>
     </Container>
   );
