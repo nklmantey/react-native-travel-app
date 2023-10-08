@@ -16,11 +16,11 @@ export default function ProfileScreen() {
   const [username, setUsername] = useState("");
   const [fullName, setFullName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
-  const { getUserProfile, updateUserProfile } = useSupabaseAuth();
+  const { getUserProfile, updateUserProfile, signOut } = useSupabaseAuth();
   const { navigate }: NavigationProp<TabNavigationType> = useNavigation();
   const session = useUserStore((state) => state.session);
 
-  async function getProfile() {
+  async function handleGetProfile() {
     setLoading(true);
 
     try {
@@ -44,7 +44,7 @@ export default function ProfileScreen() {
     }
   }
 
-  async function updateProfile() {
+  async function handleUpdateProfile() {
     setLoading(true);
 
     try {
@@ -63,9 +63,13 @@ export default function ProfileScreen() {
     }
   }
 
+  async function handleSignOut() {
+    await signOut();
+  }
+
   useEffect(() => {
     if (session) {
-      getProfile();
+      handleGetProfile();
     }
   }, [session]);
 
@@ -94,8 +98,13 @@ export default function ProfileScreen() {
         />
         <Button
           title="Save changes"
-          onPress={() => updateProfile()}
+          onPress={() => handleUpdateProfile()}
           isLoading={loading}
+        />
+        <Button
+          variant="destructive"
+          title="Sign out"
+          onPress={() => handleSignOut()}
         />
       </InputContainer>
     </Container>

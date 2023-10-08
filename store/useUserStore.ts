@@ -5,9 +5,9 @@ import { Session, User } from "@supabase/supabase-js";
 
 interface UserStore {
   user: User | null;
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
   session: Session | null;
-  setSession: (session: Session) => void;
+  setSession: (session: Session | null) => void;
   isLoggedIn: boolean;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
@@ -19,9 +19,9 @@ export const useUserStore = create(
       session: null,
       isLoggedIn: false,
       isOnboarded: false,
-      setUser: (user: User) => set((state) => ({ user })),
+      setUser: (user: User | null) => set((state) => ({ user })),
       setIsLoggedIn: (isLoggedIn: boolean) => set((state) => ({ isLoggedIn })),
-      setSession: (session: Session) => set((state) => ({ session })),
+      setSession: (session: Session | null) => set((state) => ({ session })),
     }),
     {
       name: "rn-travel-user-store",

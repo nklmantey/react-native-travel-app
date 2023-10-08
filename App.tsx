@@ -9,6 +9,10 @@ import { useEffect } from "react";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
+  const session = useUserStore((state) => state.session);
+  const user = useUserStore((state) => state.user);
+
+  useEffect(() => console.log(user, session), [user, session]);
 
   if (!isLoadingComplete) {
     return null;
