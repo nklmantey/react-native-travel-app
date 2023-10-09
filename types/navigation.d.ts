@@ -10,8 +10,8 @@ type AuthNavigationType = {
 };
 
 type TabNavigationType = {
+  ProfileNavigation: undefined;
   HomeNavigation: undefined;
-  Profile: undefined;
   ExploreNavigation: undefined;
   BookmarksNavigation: undefined;
 };
@@ -19,4 +19,9 @@ type TabNavigationType = {
 //tabs nav types
 type HomeNavigationType = {
   Home: undefined;
+};
+
+type ProfileNavigationType = {
+  Profile: undefined;
+  EditProfile: undefined;
 };

@@ -1,23 +1,25 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
-import { useSupabaseAuth } from "../../hooks";
+import { useSupabaseAuth } from "../../../hooks";
 import { View } from "react-native";
-import { Button, Input } from "../../components/ui";
+import { Button, Input } from "../../../components/ui";
 import { StatusBar } from "expo-status-bar";
-import { Header } from "../../components";
-import { supabase } from "../../lib/supabase";
-import { Session } from "@supabase/supabase-js";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { useUserStore } from "../../store/useUserStore";
+import { Header } from "../../../components";
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from "@react-navigation/native";
+import { useUserStore } from "../../../store/useUserStore";
 
 export default function ProfileScreen() {
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [fullName, setFullName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
-  const { getUserProfile, updateUserProfile, signOut } = useSupabaseAuth();
-  const { navigate }: NavigationProp<TabNavigationType> = useNavigation();
+  const { getUserProfile, signOut } = useSupabaseAuth();
+  const { navigate }: NavigationProp<ProfileNavigationType> = useNavigation();
   const session = useUserStore((state) => state.session);
 
   async function handleGetProfile() {
@@ -32,7 +34,6 @@ export default function ProfileScreen() {
       }
 
       if (data) {
-        console.log(data);
         setUsername(data.username);
         setFullName(data.full_name);
         setAvatarUrl(data.avatar_url);
@@ -44,41 +45,24 @@ export default function ProfileScreen() {
     }
   }
 
-  async function handleUpdateProfile() {
-    setLoading(true);
-
-    try {
-      const { error } = await updateUserProfile(username, fullName, avatarUrl);
-
-      if (error) {
-        setLoading(false);
-        throw error;
-      }
-
-      navigate("HomeNavigation");
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   async function handleSignOut() {
     await signOut();
   }
 
-  useEffect(() => {
-    if (session) {
-      handleGetProfile();
-    }
-  }, [session]);
+  useFocusEffect(
+    useCallback(() => {
+      if (session) {
+        handleGetProfile();
+      }
+    }, [session])
+  );
 
   return (
     <Container>
       <StatusBar style="dark" />
       <Header
         title="Profile"
-        description="Edit the fields"
+        description="View your profile below"
         canGoBack
         screen="Home"
       />
@@ -86,19 +70,19 @@ export default function ProfileScreen() {
       <InputContainer>
         <Input
           value={username}
-          onChangeText={(e) => setUsername(e)}
-          placeholder="Edit your username"
-          label="Edit username"
+          onChangeText={() => {}}
+          label="Username"
+          disabled
         />
         <Input
           value={fullName}
-          onChangeText={(e) => setFullName(e)}
-          placeholder="Edit your full name"
-          label="Edit full name"
+          onChangeText={() => {}}
+          label="Full name"
+          disabled
         />
         <Button
-          title="Save changes"
-          onPress={() => handleUpdateProfile()}
+          title="Edit profile"
+          onPress={() => navigate("EditProfile")}
           isLoading={loading}
         />
         <Button

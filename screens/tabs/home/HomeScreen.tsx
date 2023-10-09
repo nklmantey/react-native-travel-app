@@ -22,8 +22,8 @@ export default function HomeScreen() {
     <Container>
       <HeaderViewContainer>
         <HeadingText>Welcome user</HeadingText>
-        <UserAvatar onPress={() => navigate("Profile")}>
-          <Ionicons name="person" size={16} color={"#000"} />
+        <UserAvatar onPress={() => navigate("ProfileNavigation")}>
+          <Ionicons name="person" size={12} color={"#000"} />
         </UserAvatar>
       </HeaderViewContainer>
 
@@ -31,12 +31,13 @@ export default function HomeScreen() {
         <MediumText>Select a category from below</MediumText>
         <FlatList
           data={CategoryData}
+          scrollEnabled={false}
           renderItem={({ item }) => (
             <IconContainer
               style={{
                 backgroundColor:
                   item.title === activeCategory ? "#000" : "#fff",
-                borderWidth: item.title === activeCategory ? 0 : 1,
+                borderWidth: item.title === activeCategory ? 3 : 1,
               }}
               onPress={() => setActiveCategory(item.title)}
             >
@@ -49,10 +50,21 @@ export default function HomeScreen() {
             </IconContainer>
           )}
           horizontal
-          contentContainerStyle={{ gap: 16, width: "100%", flexWrap: "wrap" }}
+          contentContainerStyle={{ gap: 12, width: "100%", flexWrap: "wrap" }}
           showsHorizontalScrollIndicator={false}
         />
       </FlatListContainer>
+
+      <CardsContainer>
+        {/* <FlatList
+          data={}
+          scrollEnabled={false}
+          renderItem={({ item }) => {}}
+          horizontal
+          contentContainerStyle={{ gap: 12, width: "100%", flexWrap: "wrap" }}
+          showsHorizontalScrollIndicator={false}
+        /> */}
+      </CardsContainer>
     </Container>
   );
 }
@@ -70,8 +82,8 @@ const HeaderViewContainer = styled(View)`
 `;
 
 const UserAvatar = styled(TouchableOpacity)`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 25px;
   border-width: 1px;
   border-color: #d3d3d3;
@@ -81,12 +93,13 @@ const UserAvatar = styled(TouchableOpacity)`
 
 const FlatListContainer = styled(View)`
   gap: 12px;
-  margin-top: 40px;
+  margin-top: 24px;
 `;
 
 const IconContainer = styled(TouchableOpacity)`
-  padding: 16px;
-  border-radius: 6px;
+  padding-horizontal: 20px;
+  padding-vertical: 10px;
+  border-radius: 100px;
   border-color: #d3d3d3;
   flex-direction: row;
   gap: 8px;
@@ -101,4 +114,9 @@ const Icon = styled(Image)`
 
 const Bold = styled(BoldText)`
   color: #fff;
+`;
+
+const CardsContainer = styled(View)`
+  width: 100%;
+  margin-top: 24px;
 `;
