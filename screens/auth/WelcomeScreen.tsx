@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { View, ImageBackground } from "react-native";
+import { View, ImageBackground, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { HeadingText } from "../../components/StyledText";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,12 +20,10 @@ export default function WelcomeScreen() {
       >
         <SafeAreaContainer>
           <TextContainer>
-            <Extrabold>Welcome to Travenor</Extrabold>
-            <Button
-              title="Get started"
-              onPress={() => navigate("Login")}
-              icon={<Ionicons name="arrow-forward" size={16} color="#fff" />}
-            />
+            <Heading>Welcome to Travenor</Heading>
+            <ButtonContainer onPress={() => navigate("Login")}>
+              <Ionicons name="arrow-forward" size={25} color="#000" />
+            </ButtonContainer>
           </TextContainer>
         </SafeAreaContainer>
       </HeroImage>
@@ -59,7 +57,16 @@ const TextContainer = styled(View)`
   padding-horizontal: 20px;
 `;
 
-const Extrabold = styled(HeadingText)`
+const Heading = styled(HeadingText)`
   font-size: 34px;
   color: #fff;
+`;
+
+const ButtonContainer = styled(TouchableOpacity)`
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background-color: #fff;
+  align-items: center;
+  justify-content: center;
 `;
