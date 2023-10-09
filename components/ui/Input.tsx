@@ -11,7 +11,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 type InputProps = {
   type?: KeyboardTypeOptions;
-  placeholder: string;
+  placeholder?: string;
+  disabled?: boolean;
   value: string;
   label?: string;
   returnKeyType?: ReturnKeyTypeOptions;
@@ -23,6 +24,7 @@ type InputProps = {
 export default function Input({
   type = "default",
   placeholder,
+  disabled,
   value,
   label,
   isPassword,
@@ -60,8 +62,10 @@ export default function Input({
             borderColor: isFocused ? "#000" : "#d3d3d3",
             fontFamily: "SatoshiRegular",
             alignItems: "center",
+            color: disabled ? "gray" : "#000",
           }}
           keyboardType={type}
+          editable={!disabled}
           value={value}
           placeholder={placeholder}
           placeholderTextColor="gray"
