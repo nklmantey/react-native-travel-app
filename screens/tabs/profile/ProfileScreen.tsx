@@ -12,6 +12,7 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import { useUserStore } from "../../../store/useUserStore";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function ProfileScreen() {
   const [loading, setLoading] = useState(false);
@@ -88,6 +89,7 @@ export default function ProfileScreen() {
         <Button
           variant="destructive"
           title="Sign out"
+          icon={<Ionicons name="log-out-outline" size={20} color={"#fff"} />}
           onPress={() => handleSignOut()}
         />
       </InputContainer>
