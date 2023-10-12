@@ -1,4 +1,11 @@
-import { View, FlatList, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  Animated,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { CategoryData } from "../../../constants/categories";
@@ -8,15 +15,78 @@ import {
   MediumText,
   RegularText,
 } from "../../../components/StyledText";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { useUserStore } from "../../../store/useUserStore";
+import { PlacesData, PlacesDataType } from "../../../constants/places";
+import {
+  GlobeIcon,
+  MountainIcon,
+  ShrineIcon,
+  WaterIcon,
+} from "../../../assets/images";
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const CARD_WIDTH = SCREEN_WIDTH * 0.7;
 
 export default function HomeScreen() {
   const [activeCategory, setActiveCategory] = useState("");
   const { navigate }: NavigationProp<TabNavigationType> = useNavigation();
-  const user = useUserStore((state) => state.user);
+
+  const scrollX = useRef(new Animated.Value(0)).current;
+
+  const renderItem = ({ item }: { item: PlacesDataType }) => {
+    const inputRange = [
+      (item.id - 1) * CARD_WIDTH,
+      item.id * CARD_WIDTH,
+      (item.id + 1) * CARD_WIDTH,
+    ];
+    const scale = scrollX.interpolate({
+      inputRange,
+      outputRange: [0.8, 1, 0.8],
+      extrapolate: "clamp",
+    });
+
+    return (
+      <AnimatedView
+        style={{
+          width: CARD_WIDTH,
+          transform: [{ scale }],
+        }}
+      >
+        <ImageContainer>
+          <PlaceImage source={item.image} alt="image" resizeMode="cover" />
+        </ImageContainer>
+        <CardBottomView>
+          <BoldText>{item.location}</BoldText>
+          <IconContainer
+            style={{
+              backgroundColor: "#fff",
+              borderWidth: 1,
+              width: "50%",
+            }}
+          >
+            <Icon
+              source={
+                item.category === "temples"
+                  ? ShrineIcon
+                  : item.category === "lakes"
+                  ? WaterIcon
+                  : item.category === "mountains"
+                  ? MountainIcon
+                  : GlobeIcon
+              }
+              style={{ width: 16, height: 16 }}
+            />
+            <RegularText style={{ fontSize: 12 }}>
+              {item.category.slice(0, 1).toUpperCase()}
+              {item.category.slice(1)}
+            </RegularText>
+          </IconContainer>
+        </CardBottomView>
+      </AnimatedView>
+    );
+  };
 
   return (
     <Container>
@@ -56,14 +126,21 @@ export default function HomeScreen() {
       </FlatListContainer>
 
       <CardsContainer>
-        {/* <FlatList
-          data={}
-          scrollEnabled={false}
-          renderItem={({ item }) => {}}
+        <FlatList
           horizontal
-          contentContainerStyle={{ gap: 12, width: "100%", flexWrap: "wrap" }}
+          data={PlacesData}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          snapToInterval={CARD_WIDTH}
+          decelerationRate="fast"
           showsHorizontalScrollIndicator={false}
-        /> */}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            {
+              useNativeDriver: false,
+            }
+          )}
+        />
       </CardsContainer>
     </Container>
   );
@@ -116,7 +193,36 @@ const Bold = styled(BoldText)`
   color: #fff;
 `;
 
-const CardsContainer = styled(View)`
+const AnimatedView = styled(Animated.View)`
+  border-radius: 20px;
+  border-width: 0.5px;
+  border-color: #d3d3d3;
+  padding: 16px;
+  gap: 24px;
+`;
+
+const PlaceImage = styled(Image)`
   width: 100%;
+  height: 100%;
+  border-radius: 8px;
+`;
+
+const CardsContainer = styled(View)`
   margin-top: 24px;
+  width: 100%;
+  border-radius: 20px;
+`;
+
+const CardBottomView = styled(View)`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const ImageContainer = styled(View)`
+  width: 100%;
+  height: 250px;
+  border-radius: 8px;
+  border-width: 0.3px;
+  border-color: #d3d3d3;
 `;
