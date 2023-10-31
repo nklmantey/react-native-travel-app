@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
-import { Session } from "@supabase/supabase-js";
 import { useUserStore } from "../store/useUserStore";
 
 export default function useSupabaseAuth() {
