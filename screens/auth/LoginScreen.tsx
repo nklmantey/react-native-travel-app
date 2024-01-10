@@ -5,23 +5,32 @@ import { StatusBar } from "expo-status-bar";
 import { Header } from "../../components";
 import { Button, Input } from "../../components/ui";
 import { useState } from "react";
-import { RegularText } from "../../components/StyledText";
+import { ErrorText, RegularText } from "../../components/StyledText";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useSupabaseAuth } from "../../hooks";
 import { useUserStore } from "../../store/useUserStore";
+import { useForm, Controller } from "react-hook-form";
+import { LoginSchema } from "../../schemas";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+type LoginInputType = z.infer<typeof LoginSchema>;
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { navigate }: NavigationProp<AuthNavigationType> = useNavigation();
   const { signInWithEmail } = useSupabaseAuth();
-  const setUser = useUserStore((state) => state.setUser);
-  const setSession = useUserStore((state) => state.setSession);
+  const { setUser, setSession } = useUserStore();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInputType>({
+    resolver: zodResolver(LoginSchema),
+  });
 
-  async function handleLogin() {
+  async function onSubmit({ email, password }: LoginInputType) {
     setLoading(true);
-
     try {
       const { data, error } = await signInWithEmail(email, password);
 
@@ -55,18 +64,38 @@ export default function LoginScreen() {
         />
 
         <InputContainer>
-          <Input
-            value={email}
-            onChangeText={(e) => setEmail(e)}
-            placeholder="Enter a valid email address"
-            label="Email"
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <InputView>
+                <Input
+                  value={field.value}
+                  onChangeText={(e) => field.onChange(e)}
+                  placeholder="Enter your email address"
+                  label="Email"
+                />
+                {errors.email && <ErrorText>{errors.email.message}</ErrorText>}
+              </InputView>
+            )}
           />
-          <Input
-            value={password}
-            onChangeText={(e) => setPassword(e)}
-            placeholder="Enter your password"
-            isPassword
-            label="Password"
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <InputView>
+                <Input
+                  value={field.value}
+                  onChangeText={(e) => field.onChange(e)}
+                  placeholder="Enter your password"
+                  label="Password"
+                  isPassword
+                />
+                {errors.password && (
+                  <ErrorText>{errors.password.message}</ErrorText>
+                )}
+              </InputView>
+            )}
           />
         </InputContainer>
       </View>
@@ -74,7 +103,7 @@ export default function LoginScreen() {
       <BottomView>
         <Button
           title="Log in"
-          onPress={() => handleLogin()}
+          onPress={handleSubmit(onSubmit)}
           isLoading={loading}
         />
         <TouchableOpacity onPress={() => navigate("Signup")}>
@@ -94,6 +123,10 @@ const Container = styled(SafeAreaView)`
 const InputContainer = styled(View)`
   margin-top: 40px;
   gap: 20px;
+`;
+
+const InputView = styled(View)`
+  gap: 4px;
 `;
 
 const BottomView = styled(View)`

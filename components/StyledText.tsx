@@ -16,6 +16,12 @@ export const RegularText = styled(Text)`
   font-family: SatoshiRegular;
 `;
 
+export const ErrorText = styled(Text)`
+  font-size: 14px;
+  font-family: SatoshiRegular;
+  color: crimson;
+`;
+
 export const MediumText = styled(Text)`
   font-size: 16px;
   font-family: SatoshiMedium;

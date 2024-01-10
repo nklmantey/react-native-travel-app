@@ -5,23 +5,32 @@ import { StatusBar } from "expo-status-bar";
 import { Header } from "../../components";
 import { Button, Input } from "../../components/ui";
 import { useState } from "react";
-import { RegularText } from "../../components/StyledText";
+import { ErrorText, RegularText } from "../../components/StyledText";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useSupabaseAuth } from "../../hooks";
 import { useUserStore } from "../../store/useUserStore";
+import { useForm, Controller } from "react-hook-form";
+import { RegisterSchema } from "../../schemas";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+type RegisterInputType = z.infer<typeof RegisterSchema>;
 
 export default function SignupScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { navigate }: NavigationProp<AuthNavigationType> = useNavigation();
   const { signUpWithEmail } = useSupabaseAuth();
   const { setUser, setSession } = useUserStore();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterInputType>({
+    resolver: zodResolver(RegisterSchema),
+  });
 
-  async function handleSignup() {
+  async function onSubmit({ email, password }: RegisterInputType) {
     setLoading(true);
-
     try {
       const { data, error } = await signUpWithEmail(email, password);
 
@@ -38,6 +47,7 @@ export default function SignupScreen() {
         setSession(data.session);
         setUser(data.user);
       }
+
       navigate("Login");
     } catch (e) {
       console.log(e);
@@ -56,25 +66,56 @@ export default function SignupScreen() {
         />
 
         <InputContainer>
-          <Input
-            value={email}
-            onChangeText={(e) => setEmail(e)}
-            placeholder="Enter a valid email address"
-            label="Email"
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <InputView>
+                <Input
+                  value={field.value}
+                  onChangeText={(e) => field.onChange(e)}
+                  placeholder="Enter your email address"
+                  label="Email"
+                />
+                {errors.email && <ErrorText>{errors.email.message}</ErrorText>}
+              </InputView>
+            )}
           />
-          <Input
-            value={password}
-            onChangeText={(e) => setPassword(e)}
-            placeholder="Enter your password"
-            isPassword
-            label="Password"
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <InputView>
+                <Input
+                  value={field.value}
+                  onChangeText={(e) => field.onChange(e)}
+                  placeholder="Enter your password"
+                  label="Password"
+                  isPassword
+                />
+                {errors.password && (
+                  <ErrorText>{errors.password.message}</ErrorText>
+                )}
+              </InputView>
+            )}
           />
-          <Input
-            value={confirmPassword}
-            onChangeText={(e) => setConfirmPassword(e)}
-            placeholder="Re-enter your password"
-            isPassword
-            label="Confirm Password"
+          <Controller
+            name="confirmPassword"
+            control={control}
+            render={({ field }) => (
+              <InputView>
+                <Input
+                  value={field.value}
+                  onChangeText={(e) => field.onChange(e)}
+                  placeholder="Re-enter your password"
+                  label="Confirm Password"
+                  isPassword
+                />
+                {errors.confirmPassword && (
+                  <ErrorText>{errors.confirmPassword.message}</ErrorText>
+                )}
+              </InputView>
+            )}
           />
         </InputContainer>
       </View>
@@ -82,7 +123,7 @@ export default function SignupScreen() {
       <BottomView>
         <Button
           title="Next"
-          onPress={() => handleSignup()}
+          onPress={handleSubmit(onSubmit)}
           isLoading={loading}
         />
         <TouchableOpacity onPress={() => navigate("Login")}>
@@ -102,6 +143,10 @@ const Container = styled(SafeAreaView)`
 const InputContainer = styled(View)`
   margin-top: 40px;
   gap: 20px;
+`;
+
+const InputView = styled(View)`
+  gap: 4px;
 `;
 
 const BottomView = styled(View)`
