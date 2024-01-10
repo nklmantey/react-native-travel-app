@@ -21,7 +21,7 @@ export default function ProfileScreen() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const { getUserProfile, signOut } = useSupabaseAuth();
   const { navigate }: NavigationProp<ProfileNavigationType> = useNavigation();
-  const session = useUserStore((state) => state.session);
+  const { session } = useUserStore();
 
   async function handleGetProfile() {
     setLoading(true);

@@ -17,8 +17,7 @@ export default function SignupScreen() {
   const [loading, setLoading] = useState(false);
   const { navigate }: NavigationProp<AuthNavigationType> = useNavigation();
   const { signUpWithEmail } = useSupabaseAuth();
-  const setUser = useUserStore((state) => state.setUser);
-  const setSession = useUserStore((state) => state.setSession);
+  const { setUser, setSession } = useUserStore();
 
   async function handleSignup() {
     setLoading(true);

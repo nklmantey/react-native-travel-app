@@ -5,15 +5,12 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import AuthNavigation from "./AuthNavigation";
 import TabNavigation from "./TabNavigation";
-import { useEffect, useState } from "react";
-import { Session } from "@supabase/supabase-js";
-import { supabase } from "../lib/supabase";
 import { useUserStore } from "../store/useUserStore";
 
 const Stack = createStackNavigator<RootNavigationType>();
 
 export default function RootNavigation() {
-  const session = useUserStore((state) => state.session);
+  const { session } = useUserStore();
 
   return (
     <NavigationContainer>

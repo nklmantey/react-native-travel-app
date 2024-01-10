@@ -2,9 +2,7 @@ import { supabase } from "../lib/supabase";
 import { useUserStore } from "../store/useUserStore";
 
 export default function useSupabaseAuth() {
-  const session = useUserStore((state) => state.session);
-  const setSession = useUserStore((state) => state.setSession);
-  const setUser = useUserStore((state) => state.setUser);
+  const { session, setSession, setUser } = useUserStore();
 
   async function signInWithEmail(email: string, password: string) {
     const { error, data } = await supabase.auth.signInWithPassword({
