@@ -9,8 +9,7 @@ import { useEffect } from "react";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
-  const session = useUserStore((state) => state.session);
-  const user = useUserStore((state) => state.user);
+  const { session, user } = useUserStore();
 
   useEffect(() => console.log(user, session), [user, session]);
 
